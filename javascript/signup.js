@@ -1,28 +1,36 @@
-const form = document.querySelector(".signup form"),
-continueBtn = form.querySelector(".button input"),
-errorText = form.querySelector(".error-text");
+const form = document.querySelector(".signup form");
 
-form.onsubmit = (e)=>{
-    e.preventDefault();
-    console.log("hello")
-}
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
 
-// continueBtn.onclick = ()=>{
-//     let xhr = new XMLHttpRequest();
-//     xhr.open("POST", "php/signup.php", true);
-//     xhr.onload = ()=>{
-//       if(xhr.readyState === XMLHttpRequest.DONE){
-//           if(xhr.status === 200){
-//               let data = xhr.response;
-//               if(data === "success"){
-//                 location.href="users.php";
-//               }else{
-//                 errorText.style.display = "block";
-//                 errorText.textContent = data;
-//               }
-//           }
-//       }
-//     }
-//     let formData = new FormData(form);
-//     xhr.send(formData);
-// }
+  // Get Values from the inputField
+  const firstName = document.querySelector('.fname').value;
+  const lastName = document.querySelector('.lname').value;
+  const email = document.querySelector('.email').value;
+  let photo = document.querySelector('.photo').files[0];
+  const password = document.querySelector('.password').value;
+  const passwordConfirm = document.querySelector('.confirmPassword').value;
+
+  let formData;
+
+  formData = new FormData();
+  formData.append("firstName", firstName);
+  formData.append("lastName", lastName);
+  formData.append("email", email);
+  formData.append("photo", photo);
+  formData.append("password", password);
+  formData.append("passwordConfirm", passwordConfirm);
+  
+
+  const requestOptions = {
+    method: 'POST',
+    body: formData,
+    redirect: 'follow'
+  };
+
+  fetch("/api/v1/users/signup", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
+
+});
