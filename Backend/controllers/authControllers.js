@@ -38,7 +38,7 @@ const signToken = id => {
 }
 
 exports.signup = catchAsync(async(req, res, next) => {
-  console.log(req.file);
+  // console.log(req.file);
   const newUser = await User.create({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
@@ -55,7 +55,20 @@ exports.signup = catchAsync(async(req, res, next) => {
   createSendToken(newUser, 201, res);
 });
 
+exports.logout = catchAsync(async (req, res, next) => {
+  const updateStatus = await User.findByIdAndUpdate(req.user.id, {
+    statuss: req.body.statuss
+  })
+  res.cookie('jwt', 'loggedOut', {
+    expires: new Date(Date.now() + 60 * 1000),
+    httpOnly:true
+  }); 
 
+  res.status(200).json({
+    status: 'success',
+    data: updateStatus
+  })
+})
 
 exports.login = catchAsync(async(req, res, next) => {
   const { email, password } = req.body;
@@ -71,6 +84,11 @@ exports.login = catchAsync(async(req, res, next) => {
   if(!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect Email or Password', 401));
   }
+
+  // if (req.body. statuss === 'Offline now') {
+  //   User.updateOne({ statuss: 'Active Now' });
+  // }
+  // user.statuss.save({ statuss: 'Active Now' });
 
   // 3. if everything is ok, send token to the client
   createSendToken(user, 200, res);

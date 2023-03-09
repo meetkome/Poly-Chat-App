@@ -56,6 +56,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
     select: false
+  },
+  statuss: {
+    type: String,
+    default: 'Active Now',
   }
   
 })
@@ -71,6 +75,13 @@ userSchema.pre('save', async function(next){
   this.passwordConfirm = undefined;
   next();
 });
+
+// userSchema.pre('save', function(next) {
+//   if(!this.isModified('status')) return next();
+
+//   if(this.status === 'O')
+//   next();
+// })
 
 userSchema.pre('save', function (next) {
   if(!this.isModified('password') || this.isNew) return next();
