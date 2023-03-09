@@ -11,6 +11,8 @@ form.addEventListener('submit', (e) => {
   const password = document.querySelector('.password').value;
   const passwordConfirm = document.querySelector('.confirmPassword').value;
 
+
+
   let formData;
 
   formData = new FormData();
@@ -32,5 +34,7 @@ form.addEventListener('submit', (e) => {
   .then(response => response.text())
   .then(result => console.log(result))
   .catch(error => console.log('error', error));
+
+  form.reset();
 
 });
