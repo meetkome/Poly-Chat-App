@@ -12,9 +12,11 @@ form.addEventListener('submit', (e) => {
   let formData;
 
   formData = new FormData();
-  formData.append("email", email);
-  formData.append("password", password);
   
+  formData = JSON.stringify({
+    "email": email,
+    "password": password
+  });
 
   const requestOptions = {
     method: 'POST',
