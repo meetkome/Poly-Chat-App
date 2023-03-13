@@ -70,6 +70,12 @@ exports.logout = catchAsync(async (req, res, next) => {
   })
 })
 
+// exports.changeStatus = catchAsync(async(req, res, next) => {
+//   await User.findByEmailAndUpdate(req.body.email, {
+//     statuss: 'Active now'
+//   })
+// });
+
 exports.login = catchAsync(async(req, res, next) => {
   const { email, password } = req.body;
 
