@@ -56,8 +56,8 @@ exports.signup = catchAsync(async(req, res, next) => {
 });
 
 exports.logout = catchAsync(async (req, res, next) => {
-  const updateStatus = await User.findByIdAndUpdate(req.user.id, {
-    statuss: req.body.statuss
+  await User.findByIdAndUpdate(req.user.id, {
+    statuss: "Offline now"
   })
   res.cookie('jwt', 'loggedOut', {
     expires: new Date(Date.now() + 60 * 1000),
@@ -65,19 +65,13 @@ exports.logout = catchAsync(async (req, res, next) => {
   }); 
 
   res.status(200).json({
-    status: 'success',
-    data: updateStatus
+    status: 'success'
   })
 })
 
-// exports.changeStatus = catchAsync(async(req, res, next) => {
-//   await User.findByEmailAndUpdate(req.body.email, {
-//     statuss: 'Active now'
-//   })
-// });
-
 exports.login = catchAsync(async(req, res, next) => {
   const { email, password } = req.body;
+  const statuss = {statuss: 'Active now'};
 
   // 1. Check if the email and password is not empty
   if(!email || !password) {
@@ -86,17 +80,11 @@ exports.login = catchAsync(async(req, res, next) => {
 
   // 2. Check if user exists && password is correct 
   const user = await User.findOne({ email}).select('+password');
-   
   if(!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect Email or Password', 401));
   }
+  await user.updateOne(statuss, {statuss: 'Active now'});
 
-  // if (req.body. statuss === 'Offline now') {
-  //   User.updateOne({ statuss: 'Active Now' });
-  // }
-  // user.statuss.save({ statuss: 'Active Now' });
-
-  // 3. if everything is ok, send token to the client
   createSendToken(user, 200, res);
 });    
 
@@ -109,8 +97,6 @@ exports.protect = catchAsync(async(req, res, next) => {
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   }
-
-
   if(!token) {
     return next(new AppError('You are not logged in! Please log in to get access.', 401))
   }
