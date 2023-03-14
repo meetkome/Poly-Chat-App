@@ -92,19 +92,19 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
 // Users function handler
 exports.getAllUsers = catchAsync(async(req, res) => {
   
-    const users = await User.find();
+  const users = await User.find();
 
-    // Send Response
-    res
-    .status(200)
-    .json({
-      status: 'success',
-      requestedAt: req.requestTime,
-      results: users.length,
-      data: {
-        users
-      }
-    });
+  // Send Response
+  res
+  .status(200)
+  .json({
+    status: 'success',
+    requestedAt: req.requestTime,
+    results: users.length,
+    data: {
+      users
+    }
+  });
 });
 
 
@@ -116,14 +116,26 @@ exports.createUser = (req, res) => {
       message: 'Page is not found'
     })
 }
-exports.getSingleUser = (req, res) => {
+exports.getSingleUser = catchAsync(async(req, res, next) => {
+
+  const user = await User.findById(req.params.id);
+  if(!user) {
+    return next(new AppError(`No User found`, 404));
+  }
+
+  // Send Response
   res
-    .status(500)
-    .json({
-      status: 'Internal Error',
-      message: 'Page is not found'
-    })
-}
+  .status(200)
+  .json({
+    status: 'success',
+    requestedAt: req.requestTime,
+    results: user.length,
+    data: {
+      user
+    }
+  });
+});
+
 exports.updateUser = (req, res) => {
   res
     .status(500)
