@@ -1,7 +1,10 @@
+// const { callbackPromise } = require("nodemailer/lib/shared");
+
 const searchBar = document.querySelector(".search input"),
 searchIcon = document.querySelector(".search button"),
 usersList = document.querySelector(".users-list");
-
+const logout = document.querySelector(".logout")
+console.log(logout)
 searchIcon.onclick = ()=>{
   searchBar.classList.toggle("show");
   searchIcon.classList.toggle("active");
@@ -11,6 +14,19 @@ searchIcon.onclick = ()=>{
     searchBar.classList.remove("active");
   }
 }
+
+// Deleting user from local storage and redirect to login page
+logout.addEventListener("click", ()=>{
+  localStorage.removeItem("user")
+  window.location.href = '../login.html'
+})
+
+fetch("/api/v1/users/")
+  .then(response => response.json())
+  .then(result => {
+  console.log(result)  
+  })
+  .catch(error => console.log('error', error));
 
 // searchBar.onkeyup = ()=>{
 //   let searchTerm = searchBar.value; 
@@ -48,4 +64,5 @@ searchIcon.onclick = ()=>{
 //   }
 //   xhr.send();
 // }, 500);
+
 
