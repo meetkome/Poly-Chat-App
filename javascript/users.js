@@ -4,7 +4,26 @@ const searchBar = document.querySelector(".search input"),
 searchIcon = document.querySelector(".search button"),
 usersList = document.querySelector(".users-list");
 const logout = document.querySelector(".logout")
-console.log(logout)
+// console.log(logout)
+
+//Getting a particular login user
+const getUser =()=>{
+  const currentUser = JSON.parse(localStorage.getItem("user"))
+  if(!currentUser){
+    return window.location.href = 'login.html'
+  }
+  const user = currentUser.data.user
+  const content = document.querySelector(".content")
+  content.innerHTML = `
+    <img src=${user.photo} alt="">
+    <div class="details">
+      <span>${user.firstName} ${user.lastName}</span>
+      <p>${user.statuss}</p>
+    </div>
+  `
+}
+getUser()
+
 searchIcon.onclick = ()=>{
   searchBar.classList.toggle("show");
   searchIcon.classList.toggle("active");
@@ -24,9 +43,27 @@ logout.addEventListener("click", ()=>{
 fetch("/api/v1/users/")
   .then(response => response.json())
   .then(result => {
-  console.log(result)  
-  })
+  // console.log(result.data.users)
+  const usersList = document.querySelector(".users-list")  
+  const users = result.data.users
+  users.forEach(user => {
+    const userElement = document.createElement("a")
+    userElement.innerHTML = `
+    <div class="content">
+      <img src=${user.photo} alt="#">
+      <div class="detail">
+        <span>${user.firstName} ${user.lastName}</span>
+        <p>${user.statuss}</p>
+      </div>
+    </div>
+    <div class="status-dot"><i class="fas fa-circle"></i></div>
+    `
+    usersList.appendChild(userElement)
+  });
+})
   .catch(error => console.log('error', error));
+
+
 
 // searchBar.onkeyup = ()=>{
 //   let searchTerm = searchBar.value; 
@@ -64,5 +101,3 @@ fetch("/api/v1/users/")
 //   }
 //   xhr.send();
 // }, 500);
-
-
