@@ -24,6 +24,8 @@ const getUser =()=>{
 }
 getUser()
 
+
+// toggle the search icon
 searchIcon.onclick = ()=>{
   searchBar.classList.toggle("show");
   searchIcon.classList.toggle("active");
@@ -33,6 +35,26 @@ searchIcon.onclick = ()=>{
     searchBar.classList.remove("active");
   }
 }
+
+// Search for a particular Active user
+const searchInput = document.getElementById("searchInput");
+const items = document.getElementsByClassName("names");
+console.log(items)
+
+searchInput.addEventListener("keyup", function(event) {
+  const query = event.target.value.toLowerCase();
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+
+    if (item.innerHTML.toLowerCase().indexOf(query) > -1) {
+      item.style.display = "";
+    } else {
+      item.style.display = "none";
+    }
+  }
+});
+
 
 // Deleting user from local storage and redirect to login page
 logout.addEventListener("click", ()=>{
@@ -48,6 +70,7 @@ fetch("/api/v1/users/")
   const users = result.data.users
   users.forEach(user => {
     const userElement = document.createElement("a")
+    userElement.setAttribute("class", "names")
     userElement.innerHTML = `
     <div class="content">
       <img src=${user.photo} alt="#">
