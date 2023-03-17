@@ -107,6 +107,26 @@ exports.getAllUsers = catchAsync(async(req, res) => {
   });
 });
 
+exports.getUsers = catchAsync(async(req, res, next) => {
+ let currentUser = req.user._id;
+ let query = "" + req.query.equalTo;
+ const users = await User.find( { _id: { $ne: currentUser } });
+ if (!users) {
+  return next(new AppError(`No users are available to chat`, 204));
+ }
+  // Send Response
+  res
+  .status(200)
+  .json({
+    status: 'success',
+    requestedAt: req.requestTime,
+    results: users.length,
+    data: {
+      users
+    }
+  });
+});
+
 
 exports.createUser = (req, res) => {
   res
