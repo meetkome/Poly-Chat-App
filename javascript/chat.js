@@ -4,6 +4,15 @@ inputField = form.querySelector(".input-field"),
 sendBtn = form.querySelector("button"),
 chatBox = document.querySelector(".chat-box");
 
+const getUser =()=>{
+    const currentUser = JSON.parse(localStorage.getItem("user"))
+    if(!currentUser){
+      return window.location.href = 'login.html'
+    }
+  }
+  getUser()
+
+
 form.onsubmit = (e)=>{
     e.preventDefault();
 }
@@ -60,4 +69,26 @@ setInterval(() =>{
 function scrollToBottom(){
     chatBox.scrollTop = chatBox.scrollHeight;
   }
-  
+ 
+
+const url = window.location.href.split("=")
+const id = url[1]
+  fetch(`/api/v1/users/${id}`)
+  .then(response => response.json())
+  .then(result => {
+    const user = result.data.user
+  console.log(result.data.user)
+  let header = document.querySelector("#header")
+    header.innerHTML = `
+    <header>
+    <a href="#" class="back-icon"><i class="fas fa-arrow-left"></i></a>
+      <img src=${user.photo} alt="#">
+      <div class="detail">
+        <span>${user.firstName} ${user.lastName}</span>
+        <p>${user.statuss}</p>
+      </div>
+    </header>
+    <div class="status-dot"><i class="fas fa-circle"></i></div>
+    `
+})
+  .catch(error => console.log('error', error));

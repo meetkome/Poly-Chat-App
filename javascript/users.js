@@ -65,11 +65,12 @@ logout.addEventListener("click", ()=>{
 fetch("/api/v1/users/")
   .then(response => response.json())
   .then(result => {
-  // console.log(result.data.users)
+  console.log(result.data.users)
   const usersList = document.querySelector(".users-list")  
   const users = result.data.users
   users.forEach(user => {
     const userElement = document.createElement("a")
+    userElement.setAttribute("href", `/chat.html?id=${user._id}`)
     userElement.setAttribute("class", "names")
     userElement.innerHTML = `
     <div class="content">
@@ -87,6 +88,7 @@ fetch("/api/v1/users/")
   .catch(error => console.log('error', error));
 
 
+  
 
 // searchBar.onkeyup = ()=>{
 //   let searchTerm = searchBar.value; 
