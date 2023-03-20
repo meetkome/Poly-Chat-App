@@ -157,6 +157,7 @@ body{
   text-decoration: none;
   border-radius: 5px;
   font-size: 17px;
+  cursor: pointer;
 }
 .users .search{
   margin: 20px 0;

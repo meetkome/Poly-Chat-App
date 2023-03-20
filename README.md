@@ -20,7 +20,7 @@ This was a team project learning how to create an easy-to-use application that a
 
 * **1. HTML / CSS**
 
-* **2. RDBMS**
+* **2. MongoDB**
   
 * **3. API**
 
@@ -29,4 +29,4 @@ This was a team project learning how to create an easy-to-use application that a
 ## Authors
 * **1. Inyang Ukpong**
 * **2. Yusuf Oshindeinde**
-* **3. Kome Igho**
+* **3. OgheneKome Igho**
